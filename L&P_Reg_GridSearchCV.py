@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 #import matplotlib.pyplot as plt
 from sklearn.grid_search import GridSearchCV
-
+### Pipeline for linear and polynomial regressions
 def PolynomialRegression(degree=2,**kwargs):
     return make_pipeline(PolynomialFeatures(degree),LinearRegression(**kwargs))
 
@@ -41,14 +41,15 @@ y_test = np.array(y_test)
 
 X = X.reshape(-1,1)
 X_test = X_test.reshape(-1,1)
-
+### Intialize the hyper parameters 
 param_grid = {'polynomialfeatures__degree':np.arange(21),
               'linearregression__fit_intercept':[True,False],
               'linearregression__normalize':[True,False]}
-
+### Find out the degree of the polynomial which provides the best fit for the given data
 grid = GridSearchCV(PolynomialRegression(),param_grid,cv=7)
 grid.fit(X,y)
 model = grid.best_estimator_
+### Prediction using the parameters obtained from GridSearchCV
 y_pred = model.fit(X,y).predict(X_test)
 print(r2_score(y_test,y_pred))
 print(grid.best_params_)
